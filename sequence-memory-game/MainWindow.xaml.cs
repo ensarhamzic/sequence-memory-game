@@ -46,13 +46,16 @@ namespace sequence_memory_game
 
         }
 
-        private void GameGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void GameGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!game) return;
-            string clickedName = (e.OriginalSource as Border).Name;
+            bool hit = false;
+            Border clickedBorder = e.OriginalSource as Border;
+            string clickedName = clickedBorder.Name;
             int clickedNum = int.Parse(clickedName.Substring(1));
             if(counter == fields.Count-1 && fields[counter] == clickedNum)
             {
+                hit = true;
                 game = false;
                 AddNewField();
                 score++;
@@ -67,6 +70,24 @@ namespace sequence_memory_game
                     StartGame.IsEnabled = true;
                     MessageBox.Show($"You Lost. Your score is {score}", "You clicked on the wrong tile");
                 }
+            } else
+            {
+                hit = true;
+            }
+
+            if(hit)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    clickedBorder.Background = Brushes.Green;
+                });
+
+                await Task.Delay(150);
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    clickedBorder.Background = Brushes.LightGray;
+                });
             }
         }
 
@@ -82,11 +103,10 @@ namespace sequence_memory_game
                 }
             }
             fields.Add(randomNum);
-            showTimer = new Timer(600);
+            showTimer = new Timer(650);
             showTimer.AutoReset = true;
             showTimer.Elapsed += ShowTimer_Elapsed;
             showTimer.Enabled = true;
-
         }
 
         private void ShowTimer_Elapsed(object sender, ElapsedEventArgs e)
