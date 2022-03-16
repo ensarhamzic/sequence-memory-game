@@ -67,9 +67,9 @@ namespace sequence_memory_game
                 {
                     bestScore = score;
                     BestScore.Text = $"Best Score: {bestScore}";
-                    StartGame.IsEnabled = true;
-                    MessageBox.Show($"You Lost. Your score is {score}", "You clicked on the wrong tile");
                 }
+                StartGame.IsEnabled = true;
+                MessageBox.Show($"You Lost. Your score is {score}", "You clicked on the wrong tile");
             } else
             {
                 hit = true;
